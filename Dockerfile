@@ -1,5 +1,3 @@
-FROM alpine:3.6
-
-RUN apk add --no-cache bash git openssh-client
+FROM node:12
 
 ADD git-push /usr/local/bin/
