@@ -1,3 +1,3 @@
-FROM node:12
+FROM node:14
 
 ADD git-push /usr/local/bin/
