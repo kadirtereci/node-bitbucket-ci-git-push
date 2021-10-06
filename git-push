@@ -3,10 +3,11 @@
 url=$1
 branch=$2
 
-if [ -z "$SSH_PRIVATE_KEY" ]; then
-	>&2 echo "Set SSH_PRIVATE_KEY environment variable"
-	exit 1
-fi
+
+#if [ -z "$SSH_PRIVATE_KEY" ]; then
+#	>&2 echo "Set SSH_PRIVATE_KEY environment variable"
+#	exit 1
+#fi
 
 ssh_host=$(echo $url | sed 's/.*@//' | sed 's/[:/].*//')
 if [ -z "$ssh_host" ]; then
@@ -20,9 +21,13 @@ if [[ $url =~ ^ssh://[^/]+:([0-9]+) ]]; then
 fi
 
 # TODO: skip on multiple runs
-mkdir -p ~/.ssh
-echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-chmod 600 ~/.ssh/id_rsa
+
+if [ -z "$SSH_PRIVATE_KEY" ]; then
+    mkdir -p ~/.ssh
+    echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    chmod 600 ~/.ssh/id_rsa
+fi
+
 ssh-keyscan -H $ssh_port "$ssh_host" >> ~/.ssh/known_hosts
 
-git push $url ${CI_COMMIT_SHA:-HEAD}:refs/heads/${branch:-master} $([ -z "$DISABLE_FORCE_PUSH" ] && echo --force)
+git push $url ${BITBUCKET_COMMIT:-HEAD}:refs/heads/${branch:-master} $([ -z "$DISABLE_FORCE_PUSH" ] && echo --force)
