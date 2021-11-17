@@ -7,7 +7,7 @@ This GitLab CI runner image allows to deploy a GitLab project to a remote Git re
 Create `.gitlab-ci.yml`:
 
 ```yaml
-image: ilyasemenov/gitlab-ci-git-push
+image: kadirtereci/gitlab-ci-git-push
 
 stages:
   - deploy
